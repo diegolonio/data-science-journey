@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESCOM - Escuela Superior de Cómputo</title>
+  <style>
+    :root {
+      --guinda: #6f1d46;
+      --guinda-oscuro: #4a1330;
+      --dorado: #c9a227;
+      --gris: #f4f4f5;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: #222;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, var(--guinda), var(--guinda-oscuro));
+      color: #fff;
+      text-align: center;
+      padding: 5rem 1.5rem;
+    }
+    header .logo-badge {
+      display: inline-block;
+      background: #fff;
+      padding: 1.25rem 1.75rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      margin-bottom: 1.75rem;
+    }
+    header .logo-badge img {
+      display: block;
+      width: 200px;
+      max-width: 60vw;
+      height: auto;
+    }
+    header .logo {
+      font-size: 3.5rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+    }
+    header p {
+      font-size: 1.25rem;
+      margin-top: 0.5rem;
+      opacity: 0.9;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 2rem;
+      background: var(--dorado);
+      color: var(--guinda-oscuro);
+      text-decoration: none;
+      font-weight: 700;
+      padding: 0.85rem 2rem;
+      border-radius: 999px;
+      transition: transform 0.15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    section h2 {
+      color: var(--guinda);
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--gris);
+      border-left: 5px solid var(--guinda);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .card h3 { color: var(--guinda); margin-bottom: 0.5rem; }
+    footer {
+      background: var(--guinda-oscuro);
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-badge">
+      <img src="logo.png" alt="Logo de ESCOM - Escuela Superior de Cómputo, Instituto Politécnico Nacional">
+    </div>
+    <div class="logo">ESCOM</div>
+    <p>Escuela Superior de Cómputo &middot; Instituto Politécnico Nacional</p>
+    <a class="btn" href="#oferta">Conoce nuestra oferta</a>
+  </header>
+
+  <section id="oferta">
+    <h2>Oferta educativa</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Ingeniería en Sistemas Computacionales</h3>
+        <p>Diseño y desarrollo de sistemas de software y hardware para resolver problemas reales.</p>
+      </div>
+      <div class="card">
+        <h3>Ingeniería en Inteligencia Artificial</h3>
+        <p>Aprendizaje automático, ciencia de datos y sistemas inteligentes de vanguardia.</p>
+      </div>
+      <div class="card">
+        <h3>Licenciatura en Ciencia de Datos</h3>
+        <p>Análisis, modelado y visualización de datos para la toma de decisiones.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>¿Por qué ESCOM?</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Excelencia académica</h3>
+        <p>Programas acreditados y una comunidad reconocida en el ámbito del cómputo.</p>
+      </div>
+      <div class="card">
+        <h3>Innovación</h3>
+        <p>Laboratorios, proyectos y concursos que impulsan tu talento.</p>
+      </div>
+      <div class="card">
+        <h3>Comunidad politécnica</h3>
+        <p>Formando parte del IPN con la técnica al servicio de la patria.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Escuela Superior de Cómputo &middot; Instituto Politécnico Nacional</p>
+    <p>La Técnica al Servicio de la Patria</p>
+  </footer>
+</body>
+</html>

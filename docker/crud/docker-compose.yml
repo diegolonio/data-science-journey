@@ -1,0 +1,27 @@
+# Dos contenedores que trabajan juntos:
+#   - php: ejecuta el código PHP del CRUD (habla con tu Postgres)
+#   - nginx: sirve la web y reenvía los .php a php-fpm
+#
+# Ambos usan network_mode: host para poder conectarse a tu Postgres del
+# host (127.0.0.1:5432) SIN modificar ninguna configuración de tu máquina.
+services:
+  php:
+    build: ./php
+    network_mode: host
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      DB_HOST: "127.0.0.1"
+      DB_PORT: "5432"
+      DB_NAME: "analysis"
+      DB_USER: "postgres"
+      DB_PASSWORD: "password"
+
+  nginx:
+    image: nginx:latest
+    network_mode: host
+    volumes:
+      - ./src:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php

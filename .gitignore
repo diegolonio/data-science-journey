@@ -1,0 +1,12 @@
+.claude/
+.idea/
+.vscode/
+.ipynb_checkpoints/
+__pycache__/
+practical-sql
+data-science-from-scratch
+*.pyc
+venv/
+.venv/
+.env/
+*.log
