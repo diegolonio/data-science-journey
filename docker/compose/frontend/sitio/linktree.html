@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Diego Villegas | Links</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(160deg, #254f1a 0%, #1a3a2a 50%, #10241c 100%);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 48px 16px;
+}
+
+.container {
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.name {
+  margin-top: 16px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.bio {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.section-title {
+  margin-top: 32px;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.links {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.link {
+  display: block;
+  width: 100%;
+  padding: 16px 20px;
+  background: #fff;
+  color: #10241c;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.link:hover {
+  transform: scale(1.03);
+  background: #d2e823;
+}
+
+.footer {
+  margin-top: 48px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer svg {
+  stroke: #d2e823;
+  fill: #d2e823;
+  width: 16px;
+  height: 16px;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <img src="https://avatars.githubusercontent.com/u/39118059?v=4" class="avatar" alt="Foto de perfil" />
+    <p class="name" id="name">Hola, no funcionas</p>
+    <p class="bio">¡Mira mis enlaces!</p>
+
+    <p class="section-title">Mis redes sociales</p>
+    <div class="links">
+      <a id="facebookLink" href="#" class="link" target="_blank">Facebook</a>
+      <a id="instagramUser" href="#" class="link" target="_blank">Instagram</a>
+      <a id="xUser" href="#" class="link" target="_blank">X</a>
+      <a id="githubUser" href="#" class="link" target="_blank">GitHub</a>
+    </div>
+
+    <p class="section-title">Mi experiencia</p>
+    <div class="links">
+      <a id="linkedinUser" href="#" class="link" target="_blank">LinkedIn</a>
+    </div>
+
+    <p class="section-title">Mi blog</p>
+    <div class="links">
+      <a id="website" href="#" class="link" target="_blank">diegolonio.com</a>
+    </div>
+
+    <div class="footer">
+      <span id="author">2026 - Hecho por Diego Villegas</span>
+    </div>
+
+  </div>
+  <script type="text/javascript" src="requests.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+services:
+  backend:
+    image: imagen-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: contenedor-backend
+    ports:
+      - "5000:5000"
+
+  fronted:
+    image: imagen-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: contenedor-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
