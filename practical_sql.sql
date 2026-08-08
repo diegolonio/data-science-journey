@@ -1,5 +1,5 @@
 -- Crear una base de datos que pertenezca a mi usuario
-CREATE DATABASE analysis WITH OWNER = diego
+CREATE DATABASE analysis WITH OWNER = diego;
 
 
 -- Crear una tabla
@@ -84,7 +84,7 @@ SELECT * FROM teachers WHERE (school = 'F.D. Roosevelt HS') AND ((salary < 30000
 --       btw la precedencia de operadores es AND y luego OR
 
 
-/* Con lo que se ha visto hasta ahora el orden delas keywords es:
+/* Con lo que se ha visto hasta ahora el orden de las keywords es:
 
    SELECT columns
    FROM table
@@ -183,7 +183,7 @@ automatically rounds the value to [scale] decimal positions. */
         double precision allows precision to 15 decimal digits
         
 Just as numerics/decimal data types, the precision in this case also include the digits of the whole number,
-postgres stores the value in part representing the digits and an exponent (scientific notation): 23.5 = 235*10^{-1}.
+postgres stores the value in parts representing the digits and an exponent (scientific notation): 23.5 = 235*10^{-1}.
 The decimal point isn't fixed so it 'floats'. */
 
 CREATE TABLE number_data_types (

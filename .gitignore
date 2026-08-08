@@ -5,6 +5,7 @@
 __pycache__/
 practical-sql
 data-science-from-scratch
+Hands-On-Data-Analysis-with-Pandas-2nd-edition-2nd_edition
 *.pyc
 venv/
 .venv/
