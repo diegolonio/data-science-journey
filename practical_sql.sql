@@ -97,7 +97,7 @@ FROM teachers
 WHERE school LIKE '%Roos%'
 ORDER BY hire_date DESC;
 
--- Ejercicios del Capítulo 4
+-- Ejercicios del Capítulo 3
 
 /* The school district superintendent asks for a list of teachers in each school. Write a
 query that lists the schools in alphabetical order along with teachers ordered by last name A–Z.*/
@@ -203,11 +203,70 @@ SELECT numeric_column * 10000000 AS fixed, real_column * 10000000 AS floating
 FROM number_data_types
 WHERE numeric_column = .7;
 
+-- Dates
+
+CREATE TABLE date_time_types (
+    timestamp_column TIMESTAMP WITH TIME ZONE,
+    interval_column INTERVAL
+);
+
+INSERT INTO date_time_types VALUES
+    ('2022-12-31 01:00 EST', '2 days'),
+    ('2022-12-31 01:00 -8', '1 month'),
+    ('2022-12-31 01:00 Australia/Melbourne', '1 century'),
+    (now(), '1 week');
+
+SELECT * FROM date_time_types;
+
+SELECT timestamp_column, interval_column, timestamp_column - interval_column AS new_date
+FROM date_time_types;
+
+-- CAST
+
+SELECT timestamp_column, CAST(timestamp_column AS VARCHAR(10)) FROM date_time_types;
+
+SELECT numeric_column, CAST(numeric_column AS INTEGER), CAST(numeric_column AS TEXT)
+FROM number_data_types;
+
+SELECT timestamp_column, timestamp_column::VARCHAR(10) FROM date_time_types;
+
+SELECT numeric_column, numeric_column::INTEGER, numeric_column::TEXT
+FROM number_data_types;
 
 
+-- Chapter 4 Exercises
 
+/* Your company delivers fruit and vegetables to local grocery stores, and you need to
+track the mileage driven by each driver each day to a tenth of a mile. Assuming no
+driver would ever travel more than 999 miles in a day, what would be an appropriate
+data type for the mileage column in your table? Why? 
 
+A: A DECIMAL type is appropriate since we know the maximum number of digits the mileage
+is going to have: DECIMAL(4, 1)
+*/
 
+/* In the table listing each driver in your company, what are appropriate data types for the
+drivers’ first and last names? Why is it a good idea to separate first and last names into
+two columns rather than having one larger name column?
+
+A: Names tend to have a reasonable maximum number of characters so VARCHAR fits better
+in this case. On the other hand, it's much better to separate first and last names because
+we can perform sort and filter more precisely on the retrieved data */
+
+/* Assume you have a text column that includes strings formatted as dates. One of the
+strings is written as '4//2021'. What will happen when you try to convert that string to
+the timestamp data type? */
+
+INSERT INTO date_time_types VALUES ('4//2021', '1000 years');
+
+/* pgAdmin threw this error:
+
+ERROR:  invalid input syntax for type timestamp with time zone: "4//2021"
+LINE 1: INSERT INTO date_time_types VALUES ('4//2021', '1000 years')...
+                                            ^ 
+
+SQL state: 22007
+Character: 37 */
 
 
 
