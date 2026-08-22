@@ -155,7 +155,7 @@ psql -d analysis -c "\copy char_data_types TO '/home/diego/ml/char_data_types.cs
 
 in a terminal. */
 
--- Integer numbers
+-- INTEGER numbers
 
 
 -- Those are SMALLINT (2 bytes), INTEGER (4 bytes) and BIGINT (8 bytes)
@@ -267,6 +267,45 @@ LINE 1: INSERT INTO date_time_types VALUES ('4//2021', '1000 years')...
 
 SQL state: 22007
 Character: 37 */
+
+-- Chapter 5: Exporting and Importing Data
+
+
+-- We'll use the us_counties_pop_est_2019 CSV file
+CREATE TABLE us_counties_pop_est_2019 (
+    -- These are descriptive field not actual quantities
+    state_fips TEXT,
+    county_fips TEXT,
+    -- From 1 to 4 (Northeast, Midwest, South and West)
+    region SMALLINT,
+    -- Complete names
+    state_name TEXT,
+    county_name TEXT,
+    -- Both represents the total area of each county
+    area_land BIGINT,
+    area_water BIGINT,
+    -- Latitude and Longitude of a point near the center of each county
+    internal_point_lat NUMERIC(10, 7),
+    internal_point_lon NUMERIC(10, 7),
+    -- All of these are from July 1, 2018 to June 30, 2019
+    pop_est_2018 INTEGER,
+    pop_est_2019 INTEGER,
+    births_2019 INTEGER,
+    deaths_2019 INTEGER,
+    international_migr_2019 INTEGER,
+    domestic_migr_2019 INTEGER,
+    residual_2019 INTEGER,
+    CONSTRAINT counties_2019_key PRIMARY KEY (state_fips, county_fips)
+);
+
+SELECT * FROM us_counties_pop_est_2019;
+
+-- Once again, using COPY WITH from pgAdmin didn't work, so I use instead
+-- psql -d analysis -c "\copy us_counties_pop_est_2019 FROM '/home/diego/ml/us_counties_pop_est_2019.csv' WITH (FORMAT CSV, HEADER)"
+COPY us_counties_pop_est_2019
+FROM '/home/diego/ml/us_counties_pop_est_2019.csv'
+WITH (FORMAT CSV, HEADER);
+
 
 
 
