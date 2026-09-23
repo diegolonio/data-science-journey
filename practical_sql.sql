@@ -16,8 +16,11 @@ CREATE TABLE IF NOT EXISTS teachers ( -- IF NOT EXISTS impide que devuelva un er
 -- Insertar datos en una tabla
 INSERT INTO teachers (first_name, last_name, school, hire_date, salary) VALUES 
     ('Janet', 'Smith', 'F.D. Roosevelt HS', '2011-10-30', 36200),  -- El ID no se inserta porque
-    ('Lee', 'Reynolds', 'F.D. Roosevelt HS', '1993-05-22', 65000); -- PostgresSQL va incrementando el valor
-
+    ('Lee', 'Reynolds', 'F.D. Roosevelt HS', '1993-05-22', 65000), -- PostgresSQL va incrementando el valor
+	('Samuel', 'Cole', 'Myers Middle School', '2005-08-01', 43500),
+	('Samantha', 'Bush', 'Myers Middle School', '2011-10-30', 36200),
+	('Betty', 'Diaz', 'Myers Middle School', '2005-08-30', 43500),
+	('Kathleen', 'Roush', 'F.D. Roosevelt HS', '2010-10-22', 38500);
 
 -- Seleccionar todos los registros de una tabla
 SELECT * FROM teachers; -- (1)
@@ -40,7 +43,7 @@ SELECT last_name, first_name, salary FROM public.teachers ORDER BY 3 DESC;
 
 
 -- Se puede ordenar con respecto a multiples columnas pero se hace difícil de leer a
--- medida que se hacen ordenamientos con m-as columnas
+-- medida que se hacen ordenamientos con más columnas
 SELECT last_name, school, hire_date FROM teachers ORDER BY school ASC, hire_date DESC;
 
 
@@ -66,7 +69,7 @@ SELECT last_name, school, hire_date FROM teachers WHERE last_name IN ('Bush', 'R
 SELECT last_name, school, hire_date FROM teachers WHERE first_name LIKE 'Sam%';
 
 --  ILIKE (case insensitive):
-SELECT last_name, school, hire_date FROM teachers WHERE first_name LIKE 'sam%';
+SELECT last_name, school, hire_date FROM teachers WHERE first_name ILIKE 'sam%';
 
 -- Para los dos casos anteriores se utiliza % como wildcar para 1 o más caracteres y _ para un solo caracter
 
@@ -306,6 +309,118 @@ COPY us_counties_pop_est_2019
 FROM '/home/diego/ml/us_counties_pop_est_2019.csv'
 WITH (FORMAT CSV, HEADER);
 
+SELECT county_name, state_name, area_land
+FROM us_counties_pop_est_2019
+ORDER BY area_land DESC
+LIMIT 3;
+
+-- Get the 5 counties with the highest longitude
+SELECT county_name, state_name, internal_point_lat, internal_point_lon
+FROM us_counties_pop_est_2019
+ORDER BY internal_point_lon DESC
+LIMIT 5;
+
+-- Importing a subset of columns
+CREATE TABLE supervisor_salaries (
+	id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	town TEXT,
+	county TEXT,
+	supervisor TEXT,
+	start_date DATE,
+	salary NUMERIC(10, 2),
+	benefits NUMERIC(10, 2)
+);
+
+-- Since I can't use COPY statement I executed it from the command line:
+-- psql -d analysis -c "\copy supervisor_salaries (town, supervisor, salary)
+-- 							FROM '/home/diego/ml/supervisor_salaries.csv' WITH (FORMAT CSV, HEADER)"
+
+SELECT * FROM supervisor_salaries;
+
+DELETE FROM supervisor_salaries;
+
+-- Importing a subset of rows
+-- psql -d analysis -c "\copy supervisor_salaries (town, supervisor, salary)
+--						FROM '/home/diego/ml/supervisor_salaries.csv'
+--						WITH (FORMAT CSV, HEADER)
+--						WHERE town = 'New Brillig'"
+
+-- TEMPORARY TABLES
+CREATE TEMPORARY TABLE supervisor_salaries_temp (LIKE supervisor_salaries INCLUDING ALL);
+
+COPY supervisor_salaries_temp (town, supervisor, salary)
+FROM '/home/diego/ml/supervisor_salaries.csv'
+WITH (FORMAT CSV, HEADER);
+
+INSERT INTO supervisor_salaries (town, county, supervisor, salary)
+SELECT town, 'Mills', supervisor, salary
+FROM supervisor_salaries_temp;
+
+DROP TABLE supervisor_salaries_temp;
+
+SELECT * FROM supervisor_salaries;
+
+-- EXPORTING DATA
+COPY us_counties_pop_est_2019
+TO '/home/diego/ml/us_counties_export.txt'
+WITH (FORMAT CSV, HEADER, DELIMITER '|');
+
+COPY us_counties_pop_est_2019 (county_name, internal_point_lat, internal_point_lon)
+TO '/home/diego/ml/us_counties_export.txt'
+WITH (FORMAT CSV, HEADER, DELIMITER '|');
+
+COPY (
+	SELECT county_name, state_name
+	FROM us_counties_pop_est_2019
+	WHERE county_name ILIKE '%mill%'
+) TO '/home/diego/ml/us_counties_export.txt'
+WITH (FORMAT CSV, HEADER, DELIMITER '|');
+
+-- Chapter 5 exercises
+
+/* 1. Write a WITH statement to include with COPY to handle the import of an imaginary text file
+whose first couple of rows look like this:
+
+id:movie:actor
+50:#Mission: Impossible#:Tom Cruise*/
+
+CREATE TABLE movies (
+	id INTEGER,
+	name TEXT,
+	actor TEXT
+);
+
+SELECT * FROM movies;
+
+COPY movies
+FROM '/home/diego/ml/movies.csv'
+WITH (FORMAT CSV, HEADER, DELIMITER ':', QUOTE '#');
+
+/* 2. Using the table us_counties_pop_est_2019 you created and filled in this chapter, export
+to a CSV file the 20 counties in the United States that had the most births. Make sure
+you export only each county’s name, state, and number of births. (Hint: births are
+totaled for each county in the column births_2019.)*/
+
+COPY (
+	SELECT county_name, state_name, births_2019
+	FROM us_counties_pop_est_2019
+	ORDER BY births_2019 DESC
+	LIMIT 20
+) TO '/home/diego/ml/20_counties.csv'
+WITH (FORMAT CSV, HEADER);
+
+/* 3. Imagine you’re importing a file that contains a column with these values:
+
+17519.668
+20084.461
+18976.335
+
+Will a column in your target table with data type numeric(3,8) work for these values?
+Why or why not?*/
+
+-- No, because numeric(3, 8) means numbers lesser than 0.001; thus they don't fit in.
+
+-- Chapter 6: Basic math and stats with SQL
 
 
 
