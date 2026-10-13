@@ -422,6 +422,187 @@ Why or why not?*/
 
 -- Chapter 6: Basic math and stats with SQL
 
+-- Basic operations
+
+SELECT 2 + 2 AS result;
+SELECT 4 - 3 AS result;
+SELECT 5 * 4 AS result;
+
+-- Integer division + modulo
+SELECT 10 / 8 AS quotient, 10 % 8 as reminder;
+-- Result: |  1  |  2  |
+
+-- Using float, numeric or decimal types performs the entire division
+SELECT 10.0 / 4 AS quotient;
+-- Result: 2.5000000000000000
+
+SELECT 10::REAL / 4 AS quotient;
+-- Result: 2.5
+
+SELECT 10 / 4::DOUBLE PRECISION AS quotient;
+-- Result: 2.5
+
+SELECT 10::NUMERIC(3, 1) / 4 AS quotient;
+-- Result: 2.5000000000000000
+
+SELECT 10 / 4::DECIMAL(2, 1) AS quotient;
+-- Result: 2.5000000000000000
+
+SELECT 3 ^ 4 AS result;
+-- Result: 81
+
+SELECT |/ 4 AS result;
+-- Result: 2
+
+SELECT sqrt(4) AS result;
+-- Result: 2
+
+SELECT ||/ 8 AS result;
+-- Result: 2
+
+SELECT factorial(5) AS result;
+-- Result: 120
+
+SELECT 3 * 4 ^ 6 - 1 AS result;
+-- Result: 12287
+
+SELECT 3 * 4 ^ (6 - 1) AS result;
+-- Result: 3072
+
+SELECT (3 * 4) ^ 6 - 1 AS result;
+-- Result: 2985983
+
+SELECT county_name AS county,
+state_name AS state,
+pop_est_2019 AS pop,
+births_2019 AS births,
+deaths_2019 AS deaths,
+international_migr_2019 AS int_migr,
+domestic_migr_2019 AS dom_migr,
+residual_2019 AS residual
+FROM us_counties_pop_est_2019;
+
+SELECT county_name AS county,
+state_name AS state,
+births_2019 AS births,
+deaths_2019 AS deaths,
+births_2019 - deaths_2019 AS natural_increase
+FROM us_counties_pop_est_2019
+ORDER BY state_name, county_name;
+
+SELECT county_name AS county,
+state_name AS state,
+pop_est_2019 AS pop,
+pop_est_2018
++ births_2019
+- deaths_2019
++ international_migr_2019
++ domestic_migr_2019
++ residual_2019 AS components_total,
+pop_est_2019 - (
+pop_est_2018
++ births_2019
+- deaths_2019
++ international_migr_2019
++ domestic_migr_2019
++ residual_2019) AS difference
+FROM us_counties_pop_est_2019
+ORDER BY difference DESC;
+
+SELECT county_name AS county,
+state_name AS state,
+-- Also: CAST(area_water AS NUMERIC)
+area_water::NUMERIC / (area_land + area_water) * 100 AS pct_water
+FROM us_counties_pop_est_2019
+ORDER BY pct_water DESC;
+
+
+CREATE TABLE percent_change (
+    department TEXT,
+    spend_2019 NUMERIC(10, 2),
+    spend_2022 NUMERIC(10, 2)
+);
+
+INSERT INTO percent_change VALUES
+    ('Assessor', 178556, 179500),
+    ('Building', 250000, 289000),
+    ('Clerk', 451980, 650000),
+    ('Library', 87777, 90001),
+    ('Parks', 250000, 223000),
+    ('Water', 199000, 195000);
+
+SELECT department, spend_2019, spend_2022, round((spend_2022 - spend_2019) / spend_2019 * 100, 1) AS pct_change
+FROM percent_change;
+
+SELECT sum(pop_est_2019) AS county_sum, round(avg(pop_est_2019), 0) AS county_average
+FROM us_counties_pop_est_2019;
+
+CREATE TABLE percentile_test (
+    numbers INTEGER
+);
+
+INSERT INTO percentile_test (numbers) VALUES (1), (2), (3), (4), (5), (6);
+
+SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY numbers),
+       percentile_disc(0.5) WITHIN GROUP (ORDER BY numbers)
+FROM percentile_test;
+
+SELECT percentile_cont(ARRAY[0.25, 0.5, 0.75]) WITHIN GROUP (ORDER BY numbers) FROM percentile_test;
+
+SELECT sum(pop_est_2019) AS county_sum,
+       round(avg(pop_est_2019), 0) AS county_average,
+       percentile_cont(0.5) WITHIN GROUP (ORDER BY pop_est_2019) AS county_median
+FROM us_counties_pop_est_2019;
+
+SELECT percentile_cont(ARRAY[0.25, 0.5, 0.75]) WITHIN GROUP (ORDER BY pop_est_2019) AS quantiles
+FROM us_counties_pop_est_2019;
+
+SELECT unnest(percentile_cont(ARRAY[0.25, 0.5, 0.75]) WITHIN GROUP (ORDER BY pop_est_2019)) AS quantiles
+FROM us_counties_pop_est_2019;
+
+SELECT mode() WITHIN GROUP (ORDER BY births_2019)
+FROM us_counties_pop_est_2019;
+
+-- Chapter 6 exercises
+
+/* 1. Write a SQL statement for calculating the area of a circle whose radius is 5 inches. (If
+you don’t remember the formula, it’s an easy web search.) Do you need parentheses in
+your calculation? Why or why not? */
+
+-- A = pi * r ^ 2, we don't need parentheses since the power is evaluated before multiplication
+
+SELECT pi() * 5 ^ 2 AS result;
+
+/* 2. Using the 2019 US Census county estimates data, calculate a ratio of births to deaths
+for each county in New York state. Which region of the state generally saw a higher
+ratio of births to deaths in 2019? */
+
+SELECT state_name AS state,
+       county_name AS county,
+       births_2019 AS births,
+       deaths_2019 AS deaths,
+       round(births_2019::NUMERIC / deaths_2019, 2) AS ratio
+FROM us_counties_pop_est_2019
+WHERE state_name LIKE 'New York'
+ORDER BY ratio DESC;
+
+/* R: Rockland, Jefferson and Kings counties saw the highest ratios of births to deaths. */
+
+/* 3. Was the 2019 median county population estimate higher in California or New York? */
+
+SELECT state_name AS state,
+       percentile_cont(0.5) WITHIN GROUP (ORDER BY pop_est_2019) AS median
+FROM us_counties_pop_est_2019
+WHERE state_name IN ('New York', 'California')
+GROUP BY state_name;
+
+/* R: California had the highest median. */
+
+-- Chapter 7: Joining tables in a relational database
+
+-- To be continued...
+
+
 
 
 
